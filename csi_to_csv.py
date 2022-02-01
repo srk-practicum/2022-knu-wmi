@@ -13,7 +13,7 @@ for i in dir_pcap:
         csi_amplitude, no_frames, no_subcarriers = csitools.get_CSI(csi_data, metric="amplitude")
         df = pandas.DataFrame(csi_amplitude.reshape(no_frames, no_subcarriers))
         new_filename = j.split('.')[0]+".csv"
-        df.to_csv(f"csv_files/{i}/{new_filename}.csv")
+        df.to_csv(f"csv_files/{i}/{new_filename}")
 
 
 
