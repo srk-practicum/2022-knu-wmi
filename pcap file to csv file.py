@@ -13,5 +13,4 @@ for i in dir_pcap:
     # df = pd.DataFrame(csi_amplitude.reshape(187, 256))
     df = pd.DataFrame(csi_amplitude.reshape(no_frames, no_subcarriers))
     new_filename = i.split('.')[0] + ".csv"
-    df.to_csv(path_or_buf=f"csv_files/{new_filename}.csv", header=False, index=False)
-
+    df.to_csv(path_or_buf=f"csv_files/{new_filename}", header=False, index=False)
