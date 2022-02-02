@@ -13,8 +13,8 @@ Scolor=""
 marker=['s', '<', '^', 'x', '+', 'v', '^', '', '>', '', 'd']
 for i in dir_pcap:
     number_renders += 1
-    my_reader = get_reader(f"D:\\universe\\samsung_practic\\test_plate_standart\\{i}")
-    csi_data = my_reader.read_file(f"D:\\universe\\samsung_practic\\test_plate_standart\\{i}")
+    my_reader = get_reader(fr"D:\universe\samsung_practic\test_plate_standart\{i}")
+    csi_data = my_reader.read_file(fr"D:\universe\samsung_practic\test_plate_standart\{i}")
     csi_phase, no_frames, no_subcarriers = csitools.get_CSI(csi_data, metric="phase")
     csi_amplitude, no_frames, no_subcarriers = csitools.get_CSI(csi_data, metric="amplitude")
     #print("no_frames= ", no_frames)

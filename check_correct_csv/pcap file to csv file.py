@@ -6,8 +6,8 @@ import os
 dir_pcap = os.listdir(r"D:\universe\samsung_practic\test_plate_standart")
 
 for i in dir_pcap:
-    my_reader = get_reader(f"D:\\universe\\samsung_practic\\test_plate_standart\\{i}")
-    csi_data = my_reader.read_file(f"D:\\universe\\samsung_practic\\test_plate_standart\\{i}", scaled=True)
+    my_reader = get_reader(fr"D:\universe\samsung_practic\test_plate_standart\{i}")
+    csi_data = my_reader.read_file(fr"D:\universe\samsung_practic\test_plate_standart\{i}", scaled=True)
     csi_phase, no_frames, no_subcarriers = csitools.get_CSI(csi_data, metric="phase")
     csi_amplitude, no_frames, no_subcarriers = csitools.get_CSI(csi_data)
     csi_amplitude = csi_amplitude[:, :, 0, 0]
@@ -17,4 +17,4 @@ for i in dir_pcap:
     df = pd.DataFrame(csi_amplitude.reshape(no_frames, no_subcarriers))
 
     new_filename = i.split('.')[0] + ".csv"
-    df.to_csv(path_or_buf=f"D:\\universe\\python\\GIt\\knu\\csv_files\\{new_filename}", header=False, index=False)
+    df.to_csv(path_or_buf=fr"D:\universe\python\GIt\knu\csv_files\{new_filename}", header=False, index=False)
