@@ -1,0 +1,3 @@
+#!d:\universe\python\git\check_correct_csv\venv\scripts\python.exe
+from numba.pycc import main
+main()

@@ -1,0 +1,55 @@
+# This function takes CSIData and returns the assembled CSI matrix from all frames, 
+# as well as the number of frames and subcarrier contained therein.
+# 
+# 1. The first frame's shape is used to establish parameters for the assembled CSI matrix.
+#       ? Some kind of assert test or something to check all frames are uniform would be good!
+#       - First we get the number of subcarriers.
+#       - Then we check the number of dimensions to count the antennas.
+# 2. Assemble the empty matrix to contain our extracted CSI.
+# 3. Iterate through each frame and extract CSI for each subcarrier at each antenna stream.
+# 4. Return complete CSI matrix, number of frames and number of subcarriers.
+
+def get_CSI(csi_data: 'CSIData', metric: str="amplitude", antenna_stream: int=-1, extract_as_dBm: bool=True) -> Tuple[np.array, int, int]:
+
+    #This looks a little ugly.
+    frames = csi_data.frames
+    csi_shape = frames[0].csi_matrix.shape
+    
+    no_frames = len(frames)
+    no_subcarriers = csi_shape[0]
+
+    #Matrices should be Frames * Subcarriers * Rx * Tx.
+    #Single Rx/Tx streams should be squeezed.
+    if len(csi_shape) == 3:
+        #Intel data comes as Subcarriers * Rx * Tx.
+        no_rx_antennas = csi_shape[1]
+        no_tx_antennas = csi_shape[2]
+    elif len(csi_shape) == 2 or len(csi_shape) == 1:
+        #Single antenna stream.
+        no_rx_antennas = 1
+        no_tx_antennas = 1
+    else:
+        #Error. Unknown CSI shape.
+        print("Error: Unknown CSI shape.")
+
+    csi = np.zeros((no_frames, no_subcarriers, no_rx_antennas, no_tx_antennas))
+
+    for frame in range(no_frames):
+        frame_data = frames[frame].csi_matrix
+        for subcarrier in range(no_subcarriers):
+            subcarrier_data = frame_data[subcarrier]
+            for rx_antenna in range(no_rx_antennas):
+                for tx_antenna in range(no_tx_antennas):
+                    if no_rx_antennas == 1 and no_tx_antennas == 1:
+                        csi[frame][subcarrier] = subcarrier_data[0]
+                    else:
+                        csi[frame][subcarrier] = subcarrier_data[rx_antenna][tx_antenna]
+
+    if metric == "amplitude":
+        csi = abs(csi)
+        if extract_as_dBm:
+            csi = db(csi)
+    elif metric == "phase":
+        csi = np.angle(csi)
+
+    return (csi, no_frames, no_subcarriers)

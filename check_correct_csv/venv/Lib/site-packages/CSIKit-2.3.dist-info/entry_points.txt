@@ -1,0 +1,3 @@
+[console_scripts]
+csikit = CSIKit.__main__:main
+
