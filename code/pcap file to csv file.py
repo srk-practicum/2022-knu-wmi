@@ -1,15 +1,14 @@
 from CSIKit.reader import get_reader
 from CSIKit.util import csitools
 import pandas as pd
-import numpy as np
 import os
 dir_pcap = os.listdir(r"D:\universe\samsung_practic\test_plate_standart")
 
 for i in dir_pcap:
     my_reader = get_reader(fr"D:\universe\samsung_practic\test_plate_standart\{i}")
     csi_data = my_reader.read_file(fr"D:\universe\samsung_practic\test_plate_standart\{i}", scaled=True)
-    csi_phase, no_frames, no_subcarriers = csitools.get_CSI(csi_data, metric="phase")
-    csi_amplitude, no_frames, no_subcarriers = csitools.get_CSI(csi_data)
+    #csi_phase, no_frames, no_subcarriers = csitools.get_CSI(csi_data, metric="phase")
+    csi_amplitude, no_frames, no_subcarriers = csitools.get_CSI(csi_data, metric="amplitude")
     csi_amplitude = csi_amplitude[:, :, 0, 0]
 
 
