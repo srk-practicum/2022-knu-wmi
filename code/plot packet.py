@@ -6,7 +6,6 @@ from os.path import isfile, join
 mypath = r"D:\universe\python\GIt\knu\csv_files"
 file_names = [f.split(".")[0] for f in listdir(mypath) if isfile(join(mypath, f))]
 for name in file_names:
-
     df = pd.read_csv(fr"D:\universe\python\GIt\knu\csv_files\{name}.csv")
     rows, _ = df.shape
     for i in range(rows):
