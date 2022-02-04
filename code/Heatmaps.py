@@ -1,9 +1,4 @@
 from CSIKit.tools.batch_graph import BatchGraph
-
-import pandas as pd
-
-import matplotlib.pyplot as plt
-
 from os import listdir
 from os.path import isfile, join
 
