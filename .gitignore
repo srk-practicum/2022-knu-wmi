@@ -1,0 +1,10 @@
+.idea
+venv
+CSIKit
+.ipynb_checkpoints
+CSICapturedFiles/*
+!CSICapturedFiles/csi_data
+!CSICapturedFiles/csi_data1
+!CSICapturedFiles/csi_data_test
+main.ipynb
+main1.py
