@@ -1,5 +1,6 @@
 from CSIKit.reader import get_reader
 from CSIKit.util import csitools
+from math import *
 import os
 import pandas
 import csv
@@ -19,7 +20,17 @@ for i in dir_pcap:
         file_csv = f"files_csv/{i}/{new_name}"
         data = pandas.read_csv(file_csv, index_col=(0, 1))
         lines = list(data.values)
+        sum = 0
+        counter = 0
+        for k in range(len(lines)):
+            for p in range(len(lines[k])):
+                if (lines[k][p] != -inf):
+                    sum += int(lines[k][p])
+                    counter += 1
+        mediana = sum / counter
+        for k in range(len(lines)):
+            for p in range(len(lines[k])):
+                if (lines[k][p] == -inf):
+                    lines[k][p] = mediana
         writer = csv.writer(open(file_csv, 'w'))
         writer.writerows(lines)
-
-        
