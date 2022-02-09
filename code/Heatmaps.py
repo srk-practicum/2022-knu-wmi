@@ -4,7 +4,7 @@ from os.path import isfile, join
 
 
 
-mypath = r"D:\universe\samsung_practic\test_plate_standart"
+mypath = r"D:\universe\samsung_practic\taste_plate_new"
 
 file_names = [f.split(".")[0] for f in listdir(mypath) if isfile(join(mypath, f))]
 for name in file_names:

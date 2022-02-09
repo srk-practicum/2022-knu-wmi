@@ -1,60 +1,56 @@
-import matplotlib.pyplot as plt
-from CSIKit.reader import get_reader
-from CSIKit.util import csitools
-import os
 import pandas as pd
-import os
-from sklearn import preprocessing
-import pylab as pl
+from os import listdir
+from os.path import isfile, join
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import seaborn as sns
+def norm_data_frame(path, filenames):
+    df = pd.DataFrame()  # empty dataframe
+
+    for name in filenames:
+        file = pd.read_csv(path + name + ".csv")
+        file = pd.DataFrame(StandardScaler().fit_transform(file))
+        df = pd.concat([df, file], axis=0)
 
 
-def plotpca(xdata, ydata, target_names, items, filename):
-    """Make plot."""
-    pca = PCA(n_components=2)
-    components = pca.fit(xdata).transform(xdata)
+    return df
+def main():
 
-    # Percentage of variance explained for each components
-    print('explained variance ratio (first two components):',
-          pca.explained_variance_ratio_)
+    mypath = r"D:\universe\python\GIt\knu\train"
+    filenames = [f.split(".")[0] for f in listdir(mypath) if isfile(join(mypath, f))]
+    test_files = filenames[:len(filenames) // 4]
+    #Amplitude
+    amplitudes = norm_data_frame(r"D:\universe\python\GIt\knu\csv_files\\",test_files)
+    #print(amplitudes)
+    pca_amplitude = PCA(0.6)
 
-    pl.figure()  # Make a plotting figure
-    pl.subplots_adjust(bottom=0.1)
+    training_amplitudes = amplitudes[:600]
+    pca_amplitude.fit(training_amplitudes.values)
 
-    # NB: a maximum of 7 targets will be plotted
-    for i, (c, m, target_name) in enumerate(zip(
-            'rbmkycg', 'o^s*v+x', target_names)):
-        pl.scatter(components[ydata == i, 0], components[ydata == i, 1],
-                   color=c, marker=m, label=target_name)
-        for n, x, y in zip(
-                (ydata == i).nonzero()[0],
-                components[ydata == i, 0],
-                components[ydata == i, 1]):
-            pl.annotate(
-                items[n],
-                xy=(x, y),
-                xytext=(5, 5),
-                textcoords='offset points',
-                color=c,
-                fontsize='small',
-                ha='left',
-                va='top')
-    pl.legend()
-    pl.title('PCA of %s' % filename)
-    pl.show()
+    print(pca_amplitude.explained_variance_ratio_)
 
+    for name in test_files:
+        df = pd.read_csv(fr"D:\universe\python\GIt\knu\csv_files\{name}.csv")
+        df = pd.DataFrame(StandardScaler().fit_transform(df))
+        df = pd.DataFrame(pca_amplitude.transform(df.values))
 
-csvfile = os.listdir(fr"D:\universe\python\GIt\knu\csv_files")
+        df.to_csv(path_or_buf=fr"D:\universe\python\GIt\knu\train\{name}.csv", index=False)
 
-ind = 0
-data = pd.read_csv(csvfile, index_col=(0, 1))
-# first column provides labels
-ylabels = [a for a, _ in data.index]
-labels = [text for _, text in data.index]
-encoder = preprocessing.LabelEncoder().fit(ylabels)
+    for name in filenames:
+        df = pd.read_csv(fr'D:\universe\python\GIt\knu\csv_files\{name}.csv')
+        df = pd.DataFrame(StandardScaler().fit_transform(df))
 
-xdata = data.values
-ydata = encoder.transform(ylabels)
-target_names = encoder.classes_
-plotpca(xdata, ydata, target_names, labels, csvfile)
+        df.to_csv(path_or_buf=fr"D:\universe\python\GIt\knu\test\{name}.csv", index=False)
+    for i, name in enumerate(test_files[:10]):
+        df = pd.read_csv(fr"D:\universe\python\GIt\knu\csv_files\{name}.csv")
+        df[f'{i}'].plot.line(figsize=(12, 6), subplots=True, legend=False)
+        plt.show()
+    for i, name in enumerate(test_files[:10]):
+        df = pd.read_csv(fr"D:\universe\python\GIt\knu\csv_files\{name}.csv")
+        sns.heatmap(df, xticklabels=False, yticklabels=False)
+        plt.show()
+    df = pd.read_csv(fr"D:\universe\python\GIt\knu\csv_files\Nothing_1.csv")
+    sns.heatmap(df, xticklabels=False, yticklabels=False)
+    plt.show()
+main()
