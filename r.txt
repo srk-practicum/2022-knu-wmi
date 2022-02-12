@@ -13,7 +13,6 @@ charset-normalizer==2.0.10
 click==8.0.3
 colorama==0.4.4
 CSIKit==2.3
-csiread==1.4.0
 cycler==0.11.0
 debugpy==1.5.1
 decorator==5.1.1
